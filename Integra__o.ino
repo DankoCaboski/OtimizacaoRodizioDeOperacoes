@@ -1,9 +1,10 @@
-//Autor : FILIPEFLOP
+//Autor : Willian Danko Leite Caboski
 
 #include <SPI.h>
 #include <MFRC522.h>
 #include <LiquidCrystal.h>
 #include <Keyboard.h>
+
 
 #define SS_PIN 10
 #define RST_PIN 9
@@ -13,7 +14,8 @@ LiquidCrystal lcd(6, 7, 5, 4, 3, 2);
 
 char st[20];
 
-bool BT = 5;//debug botão leonardo rfid
+int bt = 11;//debug botão leonardo rfid
+int BT;//estado botão leonardo rfid
 
 void setup()
 {
@@ -26,7 +28,7 @@ void setup()
   //Define o número de colunas e linhas do LCD:
   lcd.begin(16, 2);
   mensageminicial();
-  pinMode (5, INPUT_PULLUP);
+  pinMode (bt, INPUT_PULLUP);
 }
 
 void loop()
@@ -37,7 +39,10 @@ void loop()
     Keyboard.press('r');
     Keyboard.releaseAll();
     delay (10);
-    Keyboard.println("excel");
+    Keyboard.println("C:\Users\aluno\Documents\GestaoDeRodizio");
+    Keyboard.println();
+
+
     BT = true
          ;
 
@@ -108,3 +113,10 @@ void mensageminicial()
   lcd.setCursor(0, 1);
   lcd.print("cartao do leitor");
 }
+
+void abre_excel()
+{
+
+}
+}
+
