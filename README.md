@@ -1,4 +1,4 @@
-# Otimização do rodizio de operações 
+# Otimização da getão de equipes
 
 > Status Do Projeto : Em Desenvolvimento ⚠️
 
@@ -8,7 +8,7 @@
 
 Rafaela
 
-Thiago Vidal Ferreira
+Thiago Carlos Vidal Ferreira
 
 Sandy
 
