@@ -6,11 +6,11 @@
 
 ## Membros:
 
-Rafaela
+Rafaela Cristina de Morais
 
 Thiago Carlos Vidal Ferreira
 
-Sandy
+Sandy Critiny Fortunato da Silva
 
 - [Willian Danko Leite Caboski](https://github.com/DankoCaboski)
 
