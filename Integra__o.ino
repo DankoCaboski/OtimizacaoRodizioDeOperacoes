@@ -1,4 +1,4 @@
-//Autor : Willian Danko Leite Caboski
+//Autor : FILIPEFLOP
 
 #include <SPI.h>
 #include <MFRC522.h>
@@ -76,11 +76,11 @@ void loop()
   conteudo.toUpperCase();
   if (conteudo.substring(1) == "ED 78 03 CA") //UID 1 - Chaveiro
   {
-    Serial.println("Ola FILIPEFLOP !");
+    Serial.println("Ola, MT 01 !");
     Serial.println();
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Ola FILIPEFLOP !");
+    lcd.print("Ola MT 01!");
     lcd.setCursor(0, 1);
     lcd.print("Acesso liberado!");
     delay(3000);
@@ -89,11 +89,11 @@ void loop()
 
   if (conteudo.substring(1) == "BD 9B 06 7D") //UID 2 - Cartao
   {
-    Serial.println("Ola Cartao !");
+    Serial.println("Ola MT 02 !");
     Serial.println();
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Ola Cartao !");
+    lcd.print("Ola MT 02");
     lcd.setCursor(0, 1);
     lcd.print("Acesso Negado !");
     delay(3000);
