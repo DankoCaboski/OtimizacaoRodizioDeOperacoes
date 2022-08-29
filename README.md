@@ -15,31 +15,10 @@ Sandy
 - [Willian Danko Leite Caboski](https://github.com/DankoCaboski)
 
 ## Objetivo
-Desenvolver uma aplicação para Avaliação Democratizada, porém incluindo uma avaliação técnica adicional feita pelo Líder do Grupo e uma avaliação de produto/negócio realizada pelo Fake Client.
- - Deve possuir um controle de usuários mínimo;
- - Deve possuir um controle de perfis (instrutores e integrantes do time);
- - Deve possuir um controle de Times;
- - Deve possuir um controle de Sprints, representando os ciclos de desenvolvimento a
-partir do qual cada integrante será avaliado;
- - Deve possibilitar a realização, por um determinado integrante do Time, da avaliação
-dos demais integrantes, incluindo a sí próprio, de forma individualizada.
-- Deve possibilitar a realização das seguintes avaliações adicionais:
-- - Instrutor Líder do Grupo avaliando o aluno Líder Técnico do Time
-- - Instrutor Fake Client avaliando o aluno PO do Time
-- Deve prover um ou mais Dashboards de acompanhamento
+Esse projeto visa desenvolver uma proposta de melhoria para os problemas identificados no atual (22/08/22) modelo de rodízio de operações implantado na General Motors de São José dos Campos, em principal: o absenteísmo dos funcionarios e a gerencia dessas situações.
+Quando um funcionário se ausenta momentaneamente ou até por um longo período, sabe-se que a principal tratativa para se lidar com a ausência baseia-se em designar um outro que esteja presente e já capacitado para suprir esse posto, porém, sabe-se que anteriormente esse funcionário já estava exercendo outra atividade que igualmente as demais não podem ser deixada em aberto. 
+Simplesmente designar o primeiro funcionário que se lembre para essa nova vaga em aberto não soluciona o problema, apenas o posterga e pode acabar deixando outro time em desfalque, quando simplesmente um novo rodízio dos presentes seria capaz de solucionar essa abstinência.
+A pandemia de COVID-19 iniciada em dezembro de 2019 tornou ainda mais notável esse problema de absenteísmo, criando um cenário atípico onde o elevado número das ausências ocasionou uma dificuldade na gerência dos funcionários presentes na para as atividades afetadas.
+Outro problema analisado na empresa onde esse trabalho se pauta, mas que se estende para outras muito além de seus muros são as intimações judiciais por conta de lesões e acidentes relacionados ao trabalho. Lesões por esforço repetitivo podem ser evitadas quando se variam as atividades exercidas, e por conta disso as folhas de rodízio de operações podem ser utilizadas como provas de que um funcionário não exerce repetitivamente uma mesma função. Porém no modelo habitual desse documento, eles podem ser danificados, rasurados ou até mesmo fraudados. Digitalizando esse documento se torna possível aumentar a segurança e prevenção à fraude, além de se resolver por completo os problemas de rasura.
 
-## Descritivo do Projeto
-
-Para a empresa PBLTeX , que deseja realizar suas avaliações democraticas, recebendo os dados  
-em um dashboard, de forma ágil e simples. 
-
-### Entregas
-- [X] [Kick-Off] - 15/08/2022 a 19/08/2022
-- [ ] [Sprint 1] - 29/08/2022 a 18/09/2022
-- [ ] [Sprint 2] - 19/09/2022 a 09/10/2022
-- [ ] [Sprint 3] - 17/10/2022 a 06/11/2022
-- [ ] [Sprint 4] - 07/11/2022 a 27/11/2022
-
-# A Visualização Do Desenvolvimento
-A visualização do desenvolvimento das atividades do projeto, **kanban**, poderá ser acompanhada por meio da plataforma Trello do Trello:
-[Visualização Do Projeto No Trello](https://trello.com/invite/api_grupofirst/619326ffbe4ce1ebe44ef2187f49dc94)
+# Monografia
