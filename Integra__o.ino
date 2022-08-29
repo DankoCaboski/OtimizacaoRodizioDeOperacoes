@@ -1,5 +1,4 @@
-//Programa : RFID - Controle de Acesso leitor RFID
-//Autor : FILIPEFLOP
+//Autor : Willian Danko Leite Caboski
 
 #include <SPI.h>
 #include <MFRC522.h>
