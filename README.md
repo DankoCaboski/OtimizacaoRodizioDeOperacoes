@@ -2,13 +2,13 @@
 
 > Status Do Projeto : Em Desenvolvimento ⚠️
 
-## SENAI São José dos Campos, 2022
+## [SENAI São José dos Campos](https://saojosedoscampos.sp.senai.br), 2022
 
 ## Membros:
 
 Rafaela Cristina de Morais
 
-Thiago Carlos Vidal Ferreira
+- [Thiago Carlos Vidal Ferreira](https://www.linkedin.com/in/thiago-ferreira-6b74381b4)
 
 Sandy Critiny Fortunato da Silva
 
