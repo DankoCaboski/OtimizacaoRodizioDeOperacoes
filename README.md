@@ -12,7 +12,7 @@ Rafaela Cristina de Morais
 
 Sandy Critiny Fortunato da Silva
 
-- [Willian Danko Leite Caboski](https://github.com/DankoCaboski)
+- [Willian Danko Leite Caboski](https://linktr.ee/dankoclcaboski)
 
 ## Objetivo
 Esse projeto visa desenvolver uma proposta de melhoria para os problemas identificados no atual (22/08/22) modelo de rodízio de operações implantado na General Motors de São José dos Campos, em principal: o absenteísmo dos funcionarios e a gerencia dessas situações.
