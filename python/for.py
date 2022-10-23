@@ -30,39 +30,61 @@ def capacitados(): #função q gera lista dos capacitados na funcao desejada
         c = c+1
         p = p+1
 
+oper = range(7,12)
+selecionados=[]
+
 def selecaoRandom():
     op = 0
     selecionados=[]
     for p in operacoes:
         if len(operacoes[op]) == 0:
-            op += 1
+            op+=1
             continue
+
         if len(operacoes[op]) == 1:
             selecionados.append(operacoes[op][0])
             print(f'operação {op} recebe {operacoes[op][0]}')
             selecionados.append(operacoes[op][0])
+            for i in operacoes:
+                if i == operacoes[op]:
+                    continue
+                elif person in operacoes[op] == True:                        
+                    operacoes[op].remove(person)        
+            print(f'operação {op} recebe {operacoes[op][pess]}')
+
         if len(operacoes[op]) == 2:
             pess = (random.randint(0,1))
-            selecionados.append(operacoes[op][pess])           
+            selecionados.append(operacoes[op][pess])
+            for i in operacoes:
+                if i == operacoes[op]:
+                    continue
+                elif person in operacoes[op] == True:                        
+                    operacoes[op].remove(person)        
             print(f'operação {op} recebe {operacoes[op][pess]}')
 
         if len(operacoes[op])>2:
             pess = (random.randint(0,len(operacoes[op])-1))
-            if selecionados.count(pess)>0:
-                while selecionados.count(pess) >0:
-                    npess = len(operacoes[op])
-                    npess-1
-                    pessoa = random.randint(0,npess)                   
-                    if selecionados.count(pessoa) == 0:
-                        selecionados.pop()
-                        selecionados.append(operacoes[op][pessoa])
-                        pess = selecionados.index(operacoes[op][pessoa])
-                        print(f'operação {op} recebe {operacoes[op][pessoa]}')
+            person = operacoes[op][pess]
+            if person in selecionados:
+                while True:
+                    npess = random.randint(0,len(operacoes[op])-1)
+                    person = operacoes[op][npess]
+                    if person in selecionados:
+                        continue
+                    if person not in selecionados:
+                        selecionados.append(person)
+                        print(f'operação {op} recebe {person}')
                         break
-            else:
-                selecionados.append(operacoes[op][pess])
-                print(f'operação {op} recebe {operacoes[op][pess]}')
+            if person not in selecionados:
+                selecionados.append(person) 
+                print(f'operação {op} recebe {person}')   
+                for i in operacoes:
+                    if i == operacoes[op]:
+                        continue
+                    elif person in operacoes[op] == True:
+                        operacoes[op].remove(person)     
         op +=1
+        print (op)
         if op > 5:
             break
 
