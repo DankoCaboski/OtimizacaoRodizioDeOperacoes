@@ -40,19 +40,19 @@ def selecaoRandom():
     for p in operacoes:
         if len(operacoes[op]) == 0:
             op+=1
-            print(f'sem pessoas capacitadas para a operação {operacoes[op]}')
+#            print(f'sem pessoas capacitadas para a operação {operacoes[op]}')
             continue
 
         if len(operacoes[op]) == 1:
             selecionados.append(operacoes[op][0])
-            print(f'operação {op} recebe {operacoes[op][0]}')
+#            print(f'operação {op} recebe {operacoes[op][0]}')
             selecionados.append(operacoes[op][0])
             for i in operacoes:
                 if i == operacoes[op]:
                     continue
                 elif person in operacoes[op] == True:                        
                     operacoes[op].remove(person)        
-            print(f'operação {op} recebe {operacoes[op][pess]}')
+#            print(f'operação {op} recebe {operacoes[op][pess]}')
 
         if len(operacoes[op]) == 2:
             pess = (random.randint(0,1))
@@ -62,7 +62,7 @@ def selecaoRandom():
                     continue
                 elif person in operacoes[op] == True:                        
                     operacoes[op].remove(person)        
-            print(f'operação {op} recebe {operacoes[op][pess]}')
+#            print(f'operação {op} recebe {operacoes[op][pess]}')
 
         if len(operacoes[op])>2:
             pess = (random.randint(0,len(operacoes[op])-1))
@@ -75,22 +75,24 @@ def selecaoRandom():
                         continue
                     if person not in selecionados:
                         selecionados.append(person)
-                        print(f'operação {op} recebe {person}')
+#                        print(f'operação {op} recebe {person}')
                         break
             if person not in selecionados:
                 selecionados.append(person) 
-                print(f'operação {op} recebe {person}')   
+#                print(f'operação {op} recebe {person}')   
                 for i in operacoes:
                     if i == operacoes[op]:
                         continue
                     elif person in operacoes[op] == True:
                         operacoes[op].remove(person)     
         op +=1
-        print (op)
+#        print (op)
         if op > 5:
             break
 
+
 delay = 0.5 #setamos o tempo de delay, o temo de cada rodizio *2 deve ser igual ao contador do do tempo de rodizio
+Nrodizio = int(input('informe o  nuero de rodízios: '))
 TempRod = int(input('informe em segundos o tempo de rodizio: '))#seta o tempo do rodizio
 contTemp = 0    #contador de ciclos do programa
 
@@ -101,12 +103,16 @@ while True:
         selecaoRandom()
         print(selecionados)
         c+=1
+        contTemp += 1 
+        Fixos.to_excel(writer,index=False,header=False,startrow=len(reader)+1)
+
     if c >= 1:
         time.sleep(delay)#para a veredura do sistema e increment ao contador
         contTemp += 1 
-        if contTemp > TempRod:
-            selecionados.clear()
-            selecaoRandom()
-            capacitados
-            print(selecionados)
-            break
+        selecionados.clear()
+        selecaoRandom()
+        capacitados()
+        print(selecionados)
+    if contTemp == Nrodizio:
+        break
+          
