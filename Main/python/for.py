@@ -1,12 +1,9 @@
 import random
 import pandas  as pd
 import time
-import  serial 
-
-porta = serial.Serial('COM3', 9600, timeout = 1)
 
 path = str(r'C:\Users\danko\OneDrive\Documentos\GitHub\OtimizacaoRodizioDeOperacoes\python\VBA.XLSM')
-#                                                                                   7       8           9           10      11          12          
+
 cabecalho1 = ['Registro','HEX','Nome','Area', 'Altura', 'Genero','Carga', 'Incapacidade', 'Over','TiranteE','TiranteD','Macaneta','Capota','Emblemas'] # Aqui estamos informando os nomes das colunas
 Fixos = pd.DataFrame(data = pd.read_excel(path, 'MEMBROS FIXOS'), columns=cabecalho1) # Aqui estamos criando um DataFrame com as informações do arquivo excel, mudar o endereco da pasta
 
@@ -19,6 +16,7 @@ PessTirD=[]#lista dos capacitados no tirante direito
 PessMaca=[]#lista dos capacitados na maçaneta
 PessCapota=[]#lista dos capacitados na capota
 PessEmblema=[]#lista dos capacitados nos emblemas
+
 
 operacoes=[PessOver, PessTirE, PessTirD, PessMaca, PessCapota, PessEmblema]
 
@@ -85,14 +83,31 @@ def selecaoRandom():
         if op > 5:
             break
 
+def validacaopresenca():
+    while True:
+        l=0
+        print ('aproxime o cracha: ')
+        a = input()
+        for i in Fixos.itertuples():
+            b = Fixos.iat[l,1]
+            if b == a:
+                print("ok")
+                break
+            else:
+                l+=1
+        break
+
 
 delay = 0.5 #setamos o tempo de delay, o temo de cada rodizio *2 deve ser igual ao contador do do tempo de rodizio
 Nrodizio = int(input('informe o  nuero de rodízios: '))
 TempRod = int(input('informe em segundos o tempo de rodizio: '))#seta o tempo do rodizio
 contTemp = 0    #contador de ciclos do programa
 
+presentes = []
+
 c = 0
 while True:
+    validacaopresenca()
     if c == 0:
         capacitados()
         selecaoRandom()
