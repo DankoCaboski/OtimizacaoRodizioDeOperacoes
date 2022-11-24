@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Otimização do rodízio de operações</title>
     <style>
-        
+        :root{
+            --marge: 20%:
+        }
         body{
-        width: 100%;
+        width: 90%;
             background-color: #1e459a;
         }
         button{  
@@ -32,12 +34,22 @@
         .botao1{
             font-size: 4px;
             border-radius: 1px;
-            margin-left: 10px;
+            margin-left: var(--marge);
         }
         .botao2{
             font-size: 4px;
             border-radius: 1px;
-            margin-right: 10px;
+            margin-right: var(--marge)
+        }
+        .imgcol{
+            display: flex;
+            flex-direction: row;
+            justify-content: end;
+        }
+        .imgDir{
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
         }
     </style>
 
@@ -47,10 +59,23 @@
         <div>Rodízio do controle de operações</div>
     </header>
         <h1>
+            <h2 class = "imgcol">
+                <div class = "imgDir">
+                        <img src="\Main\web\imagens\chrevolet.png"
+                            width="12"
+                            height="10"
+                            >  
+                        <img src="\Main\web\imagens\brasil.png"
+                            width="12"
+                            height="10"
+                            >
+                </div>
+            </h2>
             <li class = "selecoes">
                 <button class = "botao1">Seleção manual</button>
                 <button class = "botao2">Seleção automática</button>
             </li>
         </h1>
+       
 </body>
 </html>
