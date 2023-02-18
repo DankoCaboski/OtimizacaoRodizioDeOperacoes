@@ -1,9 +1,7 @@
-//Autor : Willian Danko Leite Caboski
 
 #include <SPI.h>
 #include <MFRC522.h>
 #include <LiquidCrystal.h>
-#include <Keyboard.h>
 
 
 #define SS_PIN 10
@@ -19,7 +17,6 @@ int BT;//estado botão leonardo rfid
 
 void setup()
 {
-  Keyboard.begin();
   Serial.begin(9600);   // Inicia a serial
   SPI.begin();      // Inicia  SPI bus
   mfrc522.PCD_Init();   // Inicia MFRC522
@@ -33,21 +30,6 @@ void setup()
 
 void loop()
 {
-/*  BT = digitalRead (5);
-  if (BT == false) {
-    Keyboard.press(KEY_LEFT_GUI);
-    Keyboard.press('r');
-    Keyboard.releaseAll();
-    delay (10);
-//    Keyboard.println("C:\Users\aluno\Documents\GestaoDeRodizio");
-    Keyboard.println();
-
-
-    BT = true
-         ;
-
-  }
-  */
   delay(360);
   if (BT == true) {
     Serial.write("+");
