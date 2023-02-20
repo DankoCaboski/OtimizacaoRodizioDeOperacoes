@@ -52,13 +52,14 @@ int rele[] = {43, 45, 47};
 
 String totem = "Macaneta";
 
-//String nomes[] = {"Robinson", "Goncalino", "Andre L", "Jaleel"};
 int n = 0;
-String nomes[4][7] = {{"8C 2C 56 04", "Over", "Tirante Direito", "Tirante Esquerdo", "Macaneta", "Capota", "Emblemas"},
-                         {"N/A", "N/A", "N/A", "N/A", "N/A", "Capota", "Emblemas"},
-                         {"N/A", "N/A", "N/A", "Macaneta", "Capota", "Emblemas"},
-                         {"N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"}};
-  
+
+String nomes[4][7] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Tirante Esquerdo", "Macaneta", "Capota", "Emblemas"},
+  {"Goncalino", "BA 5D 13 0A", "N/A", "N/A", "N/A", "N/A", "Capota", "Emblemas"},
+  {"Andre L", "N/A", "N/A", "N/A", "Macaneta", "Capota", "Emblemas"},
+  {"Jaleel", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"}
+};
+
 void setup() {
   for (int i = 0; i > 1; i++) {
     pinMode(rele[i], OUTPUT);
@@ -124,7 +125,7 @@ void loop() {
     printHex(rfid.uid.uidByte, rfid.uid.size);
     Serial.println();
     Serial.print(F("Em dec: "));
-//    printDec(rfid.uid.uidByte, rfid.uid.size);
+    //    printDec(rfid.uid.uidByte, rfid.uid.size);
     Serial.println();
   }
   else Serial.println(F("Card read previously."));
@@ -154,24 +155,26 @@ void call_cartao() {
 void printHex(byte *buffer, byte bufferSize) {
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(nomes[n][n]);
- /* for (int i = 0; i>3; i++){
-      if (conteudo = nomes[n]) {
-        }*/
-  
-  if (nomes[n][n] = "Robinson") {
-    for (int i = 1; i < 5; i++) {
-      if (nomes[i][i] = totem) {
-        lcd.setCursor(0, 1);
-        lcd.print("habilitado");
-        break;
-      }
+
+  while (nomes[n][1] != conteudo) {
+    n = n++;
+  }
+
+  lcd.print(nomes[n][0]);
+
+  for (int i = 1; i < 6; i++) {
+    if (nomes[n][i] = totem) {
+      lcd.setCursor(0, 1);
+      lcd.print("habilitado");
+      break;
       else {
-        return;
+        lcd.print(" nao habilitado ");
       }
     }
   }
-  
+
+
+
 
   for (byte i = 0; i < bufferSize; i++) {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
