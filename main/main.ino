@@ -2,6 +2,7 @@
 #include <MFRC522.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <Clock.h>
 
 LiquidCrystal_I2C lcd (0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
@@ -12,6 +13,17 @@ MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
 
 MFRC522::MIFARE_Key key;
 String conteudo = "";
+
+Clock meuRelogio;
+
+horario prog1;
+horario prog2;
+
+byte ultimoPrograma = 0;
+
+const int pinoRele1 = 43;
+const int pinoRele2 = 45;
+const int pinoRele3 = 47;
 
 
 // Init array that will store new NUID
@@ -25,7 +37,8 @@ int n = 0;
 String nomes[4][8] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Tirante Esquerdo", "Macaneta", "Capota", "Emblemas"},
   {"Goncalino", "BA 5D 13 0A", "N/A", "N/A", "N/A", "N/A", "Capota", "Emblemas"},
   {"Andre L", "N/A", "N/A", "N/A", "Macaneta", "Capota", "Emblemas"},
-  {"Jaleel", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"}};
+  {"Jaleel", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"}
+};
 
 void setup() {
   for (int i = 0; i > 1; i++) {
@@ -44,6 +57,19 @@ void setup() {
     key.keyByte[i] = 0xFF;
   }
 
+  prog1.hora = 05;
+  prog1.minuto = 46;
+
+  meuRelogio.ajustaHorario (05, 45, 0);
+
+  if (meuRelogio.horaMinutoIgual(prog1, meuRelogio.horarioAtual())) {
+    if (ultimoPrograma != 1) {
+      sinaleiroAmarelo();
+      Serial.println("*** Rodízio 1 ***");
+      ultimoPrograma = 1;
+    }
+  }
+
   lcd.clear();
   lcd.setCursor (0, 0);
   lcd.print("Sistema iniciado");
@@ -54,6 +80,9 @@ void setup() {
 }
 
 void loop() {
+
+  meuRelogio.quandoMillisZerar();
+  Serial.println(meuRelogio.horaParaTexto(meuRelogio.horarioAtual()));
 
   // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
   if ( ! rfid.PICC_IsNewCardPresent()) {
@@ -135,10 +164,10 @@ void printHex(byte *buffer, byte bufferSize) {
       lcd.print("habilitado");
       break;
     }
-      else {
-        lcd.print(" nao habilitado ");
-      }
+    else {
+      lcd.print(" nao habilitado ");
     }
+  }
 
   for (byte i = 0; i < bufferSize; i++) {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
@@ -156,4 +185,18 @@ void printDec(byte *buffer, byte bufferSize) {
     Serial.print(' ');
     Serial.print(buffer[i], DEC);
   }
+}
+
+void sinaleiroVerde() {
+  digitalWrite (pinoRele2, LOW);
+  digitalWrite (pinoRele3, HIGH);
+
+}
+void sinaleiroAmarelo() {
+  digitalWrite (pinoRele2, HIGH);
+  delay (20000);
+  sinaleiroVerde();
+}
+void sinaleiroVermelho() {
+
 }
