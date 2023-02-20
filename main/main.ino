@@ -54,11 +54,10 @@ String totem = "Macaneta";
 
 int n = 0;
 
-String nomes[4][7] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Tirante Esquerdo", "Macaneta", "Capota", "Emblemas"},
+String nomes[4][8] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Tirante Esquerdo", "Macaneta", "Capota", "Emblemas"},
   {"Goncalino", "BA 5D 13 0A", "N/A", "N/A", "N/A", "N/A", "Capota", "Emblemas"},
   {"Andre L", "N/A", "N/A", "N/A", "Macaneta", "Capota", "Emblemas"},
-  {"Jaleel", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"}
-};
+  {"Jaleel", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"}};
 
 void setup() {
   for (int i = 0; i > 1; i++) {
