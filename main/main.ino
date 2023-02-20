@@ -149,6 +149,9 @@ void printHex(byte *buffer, byte bufferSize) {
 
   while (nomes[n][1] != conteudo) {
     n = n++;
+    if (nomes[n][1] == conteudo) {
+      break;
+    }
   }
 
   lcd.print(nomes[n][0]);
@@ -170,6 +173,7 @@ void printHex(byte *buffer, byte bufferSize) {
   }
   while (n == 0)
   {}
+  Serial.println("foi");
 }
 
 /**
