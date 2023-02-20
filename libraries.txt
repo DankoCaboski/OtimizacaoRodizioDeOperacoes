@@ -1,0 +1,5 @@
+clock: https://github.com/canalBrincandoComIdeias/Clock#readme
+rfid: https://github.com/miguelbalboa/rfid
+New-liquidCrystal: https://github.com/fmalpartida/New-LiquidCrystal/blob/master/LiquidCrystal_I2C.h
+
+ALL OTHER LIBRARIES ARE ENBEDDED
