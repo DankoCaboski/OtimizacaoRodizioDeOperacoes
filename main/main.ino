@@ -21,11 +21,6 @@ horario prog2;
 
 byte ultimoPrograma = 0;
 
-const int pinoRele1 = 43;
-const int pinoRele2 = 45;
-const int pinoRele3 = 47;
-
-
 // Init array that will store new NUID
 byte nuidPICC[4];
 int rele[] = {43, 45, 47};
@@ -188,12 +183,12 @@ void printDec(byte *buffer, byte bufferSize) {
 }
 
 void sinaleiroVerde() {
-  digitalWrite (pinoRele2, LOW);
-  digitalWrite (pinoRele3, HIGH);
+  digitalWrite (rele[1], LOW);
+  digitalWrite (rele[2], HIGH);
 
 }
 void sinaleiroAmarelo() {
-  digitalWrite (pinoRele2, HIGH);
+  digitalWrite (rele[1], HIGH);
   delay (20000);
   sinaleiroVerde();
 }
