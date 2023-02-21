@@ -10,7 +10,7 @@ LiquidCrystal_I2C lcd (0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 #define RST_PIN 5
 
 MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
-
+byte teste = 0;
 MFRC522::MIFARE_Key key;
 String conteudo = "";
 
@@ -144,15 +144,24 @@ void call_cartao() {
 }
 
 void printHex(byte *buffer, byte bufferSize) {
+  for (byte i = 0; i < bufferSize; i++) {
+    conteudo.concat(buffer[i] < 0x10 ? " 0" : " ");
+    conteudo.concat(String(buffer[i], HEX));
+  }
+  conteudo.toUpperCase();
+  Serial.print(conteudo);
   lcd.clear();
   lcd.setCursor(0, 0);
+  lcd.print("oi");
 
-  while (nomes[n][1] != conteudo) {
+  while (teste == 0) {
     n = n++;
     if (nomes[n][1] == conteudo) {
+      teste = 1;
       break;
     }
   }
+
 
   lcd.print(nomes[n][0]);
 
@@ -171,9 +180,7 @@ void printHex(byte *buffer, byte bufferSize) {
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
     Serial.print(buffer[i], HEX);
   }
-  while (n == 0)
-  {}
-  Serial.println("foi");
+
 }
 
 /**
