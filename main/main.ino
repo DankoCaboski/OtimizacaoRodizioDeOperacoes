@@ -7,10 +7,9 @@
 LiquidCrystal_I2C lcd (0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 #define SS_PIN 53
-#define RST_PIN 5
+#define RST_PIN 2
 
 MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
-int teste = 0;
 MFRC522::MIFARE_Key key;
 String conteudo = "";
 
@@ -36,7 +35,7 @@ String nomes[4][8] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Ti
 };
 
 void setup() {
-  for (int i = 0; i > 1; i++) {
+  for (int i = 0; i < 1; i++) {
     pinMode(rele[i], OUTPUT);
   }
   for (int i = 0; i > 1; i++) {
@@ -79,26 +78,7 @@ void loop() {
   meuRelogio.quandoMillisZerar();
   Serial.println(meuRelogio.horaParaTexto(meuRelogio.horarioAtual()));
 
-  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-  if ( ! rfid.PICC_IsNewCardPresent()) {
-    return;
-  }
-
-  // Verify if the NUID has been readed
-  if ( ! rfid.PICC_ReadCardSerial())
-    return;
-
-  Serial.print(F("PICC type: "));
-  MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-  Serial.println(rfid.PICC_GetTypeName(piccType));
-
-  // Check is the PICC of Classic MIFARE type
-  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
-      piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
-      piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-    Serial.println(F("Your tag is not of type MIFARE Classic."));
-    return;
-  }
+  ver_cartao();
 
   if (rfid.uid.uidByte[0] != nuidPICC[0] ||
       rfid.uid.uidByte[1] != nuidPICC[1] ||
@@ -115,9 +95,6 @@ void loop() {
     Serial.print(F("Em hex: "));
     printHex(rfid.uid.uidByte, rfid.uid.size);
     Serial.println();
-    Serial.print(F("Em dec: "));
-    //    printDec(rfid.uid.uidByte, rfid.uid.size);
-    Serial.println();
   }
   else Serial.println(F("Card read previously."));
 
@@ -132,18 +109,44 @@ void loop() {
 }
 
 
-/**
-   Helper routine to dump a byte array as hex values to Serial.
-*/
-void call_cartao() {
-  lcd.clear();
-  lcd.setCursor (0, 0);
-  lcd.print("Aproxime seu");
-  lcd.setCursor (0, 1);
-  lcd.print("cartao");
+void ver_cartao() {
+  while (!rfid.PICC_IsNewCardPresent()) {
+    // Wait for a card to be present
+  }
+
+  // Verify if the NUID has been read
+  if (!rfid.PICC_ReadCardSerial()) {
+    return;
+  }
+
+  // Print the card type
+  MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
+  Serial.print(F("PICC type: "));
+  Serial.println(rfid.PICC_GetTypeName(piccType));
+
+  // Check if the card is of type MIFARE Classic
+  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
+    Serial.println(F("Your tag is not of type MIFARE Classic."));
+    return;
+  }
 }
 
-void printHex(byte *buffer, byte bufferSize) {
+void call_cartao() {
+  Serial.println("");
+  Serial.print("Aproxime o cartao no leitor");
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Aproxime seu");
+  lcd.setCursor(0, 1);
+  lcd.print("cartao no leitor");
+}
+
+void printHex(byte * buffer, byte bufferSize) {
+  int teste = -1 ;
+  conteudo = "";
   for (byte i = 0; i < bufferSize; i++) {
     conteudo.concat(buffer[i] < 0x10 ? " 0" : " ");
     conteudo.concat(String(buffer[i], HEX));
@@ -153,14 +156,19 @@ void printHex(byte *buffer, byte bufferSize) {
   lcd.clear();
   lcd.setCursor(0, 0);
 
-for (int i = 0; i ==3; i++){ //uma pohada de "?" invertidos
-  if (nomes[i][1] == conteudo) {
-    teste = i;
-  }
+
+  for (int i = 0; i < 4; i++) {
+    if (nomes[i][1] == conteudo) {
+      teste = i;
+      break; // interrompe o loop quando encontra o valor de "conteudo"
+    }
   }
 
-
-  Serial.print(nomes[teste][0]);
+  if (teste != -1) {
+    Serial.print(nomes[teste][0]); // imprime o valor correspondente na primeira posição do subarray
+  } else {
+    Serial.println("Valor não encontrado."); // imprime uma mensagem caso o valor não seja encontrado
+  }
 
   for (int i = 1; i < 6; i++) {
     if (nomes[n][i] = totem) {
@@ -178,16 +186,6 @@ for (int i = 0; i ==3; i++){ //uma pohada de "?" invertidos
     Serial.print(buffer[i], HEX);
   }
 
-}
-
-/**
-   Helper routine to dump a byte array as dec values to Serial.
-*/
-void printDec(byte *buffer, byte bufferSize) {
-  for (byte i = 0; i < bufferSize; i++) {
-    Serial.print(' ');
-    Serial.print(buffer[i], DEC);
-  }
 }
 
 void sinaleiroVerde() {

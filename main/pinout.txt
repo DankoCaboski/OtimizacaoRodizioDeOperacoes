@@ -7,7 +7,7 @@ arduino mega 2560:
 		43,45,47
 	rfid: - de acordo com a referencia da biblioteca
 		SS_PIN 53
-		RST_PIN 5
+		RST_PIN 2
 	I2C:
 		sda 20
 		scl 21
