@@ -26,8 +26,6 @@ int rele[] = {43, 45, 47};
 
 String totem = "Macaneta";
 
-int n = 0;
-
 String nomes[4][8] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Tirante Esquerdo", "Macaneta", "Capota", "Emblemas"},
   {"Goncalino", "BA 5D 13 0A", "N/A", "N/A", "N/A", "N/A", "Capota", "Emblemas"},
   {"Andre L", "N/A", "N/A", "N/A", "Macaneta", "Capota", "Emblemas"},
@@ -35,10 +33,8 @@ String nomes[4][8] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Ti
 };
 
 void setup() {
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 3; i++) {
     pinMode(rele[i], OUTPUT);
-  }
-  for (int i = 0; i > 1; i++) {
     digitalWrite(rele[i], LOW);
   }
 
@@ -79,13 +75,7 @@ void loop() {
   Serial.println(meuRelogio.horaParaTexto(meuRelogio.horarioAtual()));
 
   ver_cartao();
-
-  if (rfid.uid.uidByte[0] != nuidPICC[0] ||
-      rfid.uid.uidByte[1] != nuidPICC[1] ||
-      rfid.uid.uidByte[2] != nuidPICC[2] ||
-      rfid.uid.uidByte[3] != nuidPICC[3] ) {
-    Serial.println(F("A new card has been detected."));
-
+  
     // Store NUID into nuidPICC array
     for (byte i = 0; i < 4; i++) {
       nuidPICC[i] = rfid.uid.uidByte[i];
@@ -95,8 +85,6 @@ void loop() {
     Serial.print(F("Em hex: "));
     printHex(rfid.uid.uidByte, rfid.uid.size);
     Serial.println();
-  }
-  else Serial.println(F("Card read previously."));
 
   // Halt PICC
   rfid.PICC_HaltA();
@@ -144,7 +132,7 @@ void call_cartao() {
   lcd.print("cartao no leitor");
 }
 
-void printHex(byte * buffer, byte bufferSize) {
+void printHex(byte * buffer, byte bufferSize) {   //por  algum motivo sempre aparece "não identificado"
   int teste = -1 ;
   conteudo = "";
   for (byte i = 0; i < bufferSize; i++) {
@@ -171,7 +159,7 @@ void printHex(byte * buffer, byte bufferSize) {
   }
 
   for (int i = 1; i < 6; i++) {
-    if (nomes[n][i] = totem) {
+    if (nomes[teste][i] = totem) {
       lcd.setCursor(0, 1);
       lcd.print("habilitado");
       break;
@@ -180,12 +168,6 @@ void printHex(byte * buffer, byte bufferSize) {
       lcd.print(" nao habilitado ");
     }
   }
-
-  for (byte i = 0; i < bufferSize; i++) {
-    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
-    Serial.print(buffer[i], HEX);
-  }
-
 }
 
 void sinaleiroVerde() {
