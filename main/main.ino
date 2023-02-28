@@ -1,185 +1,175 @@
+#include <Wire.h>
 #include <SPI.h>
 #include <MFRC522.h>
-#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <Clock.h>
+#include <Keypad.h>
 
-LiquidCrystal_I2C lcd (0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+const int SS_PIN = 53;
+const int RST_PIN = 2;
 
-#define SS_PIN 53
-#define RST_PIN 2
-
-MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
-MFRC522::MIFARE_Key key;
-String conteudo = "";
-
-Clock meuRelogio;
-
-horario prog1;
-horario prog2;
-
-byte ultimoPrograma = 0;
-
-// Init array that will store new NUID
-byte nuidPICC[4];
 int rele[] = {43, 45, 47};
 
-String totem = "Macaneta";
+MFRC522 rfid(SS_PIN, RST_PIN); //Cria um objeto MFRC522
 
-String nomes[4][8] = {{"Robinson", "8C 2C 56 04", "Over", "Tirante Direito", "Tirante Esquerdo", "Macaneta", "Capota", "Emblemas"},
-  {"Goncalino", "BA 5D 13 0A", "N/A", "N/A", "N/A", "N/A", "Capota", "Emblemas"},
-  {"Andre L", "N/A", "N/A", "N/A", "Macaneta", "Capota", "Emblemas"},
-  {"Jaleel", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"}
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); //Cria um objeto LiquidCrystal_I2C com as configurações necessárias
+
+//Array de valores hexadecimais
+const String hexValues[] = {"8c2c564", "ba5d13a", "2A9C7E8B", "B24E758A"};
+
+//Array de nomes correspondentes
+const String names[] = {"Robson", "Goncalino", "José", "Ana"};
+
+//Array de treinamentos
+const String trainings[][6] = {
+  {"OverHead", "TiranteD", "TiranteE", "Macaneta", "Capota", "Emblemas"}, // Robson
+  {"Capota", "Emblemas"}, // Goncalino
+  {"Treinamento 3", "Treinamento 4", "Treinamento 6"}, // José
+  {"Treinamento 1", "Treinamento 4", "Treinamento 5"}  // Ana
 };
 
+//Array de registros correspondentes
+const String registro[] = {"12345", "67890", "54321", "09876"};
+
+//Nome do totem
+const String totem = "OverHead";
+
 void setup() {
-  for (int i = 0; i < 3; i++) {
+  Serial.begin(9600); //Inicia a comunicação serial
+  lcd.begin (16, 2);  //Inicia LCD 16x2
+  SPI.begin();        //Inicia a comunicação SPI
+  rfid.PCD_Init();    //Inicia o leitor RFID
+
+    for (int i = 0; i < 3; i++) {
     pinMode(rele[i], OUTPUT);
     digitalWrite(rele[i], LOW);
   }
 
-  lcd.begin (16, 2);
-  Serial.begin (9600);
-  SPI.begin(); // Init SPI bus
-  rfid.PCD_Init(); // Init MFRC522
-
-  for (byte i = 0; i < 6; i++) {
-    key.keyByte[i] = 0xFF;
-  }
-
-  prog1.hora = 05;
-  prog1.minuto = 46;
-
-  meuRelogio.ajustaHorario (05, 45, 0);
-
-  if (meuRelogio.horaMinutoIgual(prog1, meuRelogio.horarioAtual())) {
-    if (ultimoPrograma != 1) {
-      sinaleiroAmarelo();
-      Serial.println("*** Rodízio 1 ***");
-      ultimoPrograma = 1;
-    }
-  }
-
-  lcd.clear();
   lcd.setCursor (0, 0);
   lcd.print("Sistema iniciado");
-  lcd.print("  Bem vindo!   ");
   Serial.println("Sistema iniciado");
+  Serial.println();
   delay(500);
-  call_cartao();
+
+  call_Card_Keypad();
+}
+
+void call_Card_Keypad() {
+  //Define a variável i com o valor 1
+  bool i = 1;
+  //Inicia um loop infinito
+  while (true) {
+    //Verifica se a variável i é verdadeira
+    if (i) {
+      //Se sim, limpa o display LCD e exibe a mensagem
+      lcd.clear();
+      lcd.print("Aproxime o");
+      lcd.setCursor(0, 1);
+      lcd.print("cartao RFID...");
+    }
+    else {
+      //Se não, limpa o display LCD e exibe a mensagem
+      lcd.clear();
+      lcd.print("Digite o");
+      lcd.setCursor(0, 1);
+      lcd.print("registro...");
+    }
+    delay(1000);
+    //Inverte o valor da variável i
+    i = !i;
+    //Verifica se um novo cartão RFID foi detectado
+    if (rfid.PICC_IsNewCardPresent()) {
+      //Se sim, sai do loop while
+      break;
+    }
+  }
 }
 
 void loop() {
-
-  meuRelogio.quandoMillisZerar();
-  Serial.println(meuRelogio.horaParaTexto(meuRelogio.horarioAtual()));
-
-  ver_cartao();
-  
-    // Store NUID into nuidPICC array
-    for (byte i = 0; i < 4; i++) {
-      nuidPICC[i] = rfid.uid.uidByte[i];
+  CartaoLido();
+}
+void CartaoLido() {
+  //Verifica se há um cartão RFID presente
+  if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
+    //Lê o valor hexadecimal do RFID
+    String hexValue = "";
+    for (byte i = 0; i < rfid.uid.size; i++) {
+      hexValue += String(rfid.uid.uidByte[i], HEX);
+    }
+    delay(500);
+    //Procura o índice correspondente ao valor hexadecimal no array
+    int index = -1;
+    for (int i = 0; i < 4; i++) {
+      if (hexValues[i] == hexValue) {
+        index = i;
+        break;
+      }
     }
 
-    Serial.println(F("NUID tag:"));
-    Serial.print(F("Em hex: "));
-    printHex(rfid.uid.uidByte, rfid.uid.size);
-    Serial.println();
+    //Exibe as informações de treinamentos no monitor serial e no LCD
+    if (index >= 0) {
+      bool foundTotem = false;
+      for (int i = 0; i < 6; i++) {
+        if (trainings[index][i] != "") {
+          if (trainings[index][i] == totem) {
+            foundTotem = true;
+          }
+        }
+      }
 
-  // Halt PICC
-  rfid.PICC_HaltA();
+      if (foundTotem) {
+        //Exibe as informações de treinamentos no monitor serial e no LCD
+        String name = names[index];
+        Serial.print("Nome: ");
+        Serial.println(name);
 
-  // Stop encryption on PCD
-  rfid.PCD_StopCrypto1();
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("");
+        lcd.print(name);
 
-  lcd.clear();
-  delay(300);
-}
+        String reg = registro[index];
+        Serial.print("Registro: ");
+        Serial.println(reg);
 
+        lcd.setCursor(0, 1);
+        lcd.print("");
+        lcd.print(reg);
 
-void ver_cartao() {
-  while (!rfid.PICC_IsNewCardPresent()) {
-    // Wait for a card to be present
-  }
+        for (int i = 0; i < 6; i++) {
+          if (trainings[index][i] != "") {
+            Serial.print(" - ");
+            Serial.println(trainings[index][i]);
+          }
+        }
+        Serial.println("");
+      }
+      else {
+        //Funcionário não habilitada
+        Serial.println("Funcionário não habilitado");
+        Serial.print("Precisa-se treinar este funcionário para a operação: ");
+        Serial.println(totem);
+        Serial.println ("");
 
-  // Verify if the NUID has been read
-  if (!rfid.PICC_ReadCardSerial()) {
-    return;
-  }
-
-  // Print the card type
-  MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-  Serial.print(F("PICC type: "));
-  Serial.println(rfid.PICC_GetTypeName(piccType));
-
-  // Check if the card is of type MIFARE Classic
-  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
-      piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
-      piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-    Serial.println(F("Your tag is not of type MIFARE Classic."));
-    return;
-  }
-}
-
-void call_cartao() {
-  Serial.println("");
-  Serial.print("Aproxime o cartao no leitor");
-
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Aproxime seu");
-  lcd.setCursor(0, 1);
-  lcd.print("cartao no leitor");
-}
-
-void printHex(byte * buffer, byte bufferSize) {   //por  algum motivo sempre aparece "não identificado"
-  int teste = -1 ;
-  conteudo = "";
-  for (byte i = 0; i < bufferSize; i++) {
-    conteudo.concat(buffer[i] < 0x10 ? " 0" : " ");
-    conteudo.concat(String(buffer[i], HEX));
-  }
-  conteudo.toUpperCase();
-  Serial.println(conteudo);
-  lcd.clear();
-  lcd.setCursor(0, 0);
-
-
-  for (int i = 0; i < 4; i++) {
-    if (nomes[i][1] == conteudo) {
-      teste = i;
-      break; // interrompe o loop quando encontra o valor de "conteudo"
-    }
-  }
-
-  if (teste != -1) {
-    Serial.print(nomes[teste][0]); // imprime o valor correspondente na primeira posição do subarray
-  } else {
-    Serial.println("Valor não encontrado."); // imprime uma mensagem caso o valor não seja encontrado
-  }
-
-  for (int i = 1; i < 6; i++) {
-    if (nomes[teste][i] = totem) {
-      lcd.setCursor(0, 1);
-      lcd.print("habilitado");
-      break;
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Funcionario nao");
+        lcd.setCursor(0, 1);
+        lcd.print("habilitado");
+      }
+      //Aguarda a remoção do cartão RFID
+      rfid.PICC_HaltA();
+      rfid.PCD_StopCrypto1();
     }
     else {
-      lcd.print(" nao habilitado ");
+      //Cartão não cadastrado
+      Serial.println("Cartao nao cadastrado");
+      Serial.println ("");
+
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Cartao nao");
+      lcd.setCursor(0, 1);
+      lcd.print("cadastrado");
     }
   }
-}
-
-void sinaleiroVerde() {
-  digitalWrite (rele[1], LOW);
-  digitalWrite (rele[2], HIGH);
-
-}
-void sinaleiroAmarelo() {
-  digitalWrite (rele[1], HIGH);
-  delay (20000);
-  sinaleiroVerde();
-}
-void sinaleiroVermelho() {
-
 }
