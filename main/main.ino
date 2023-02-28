@@ -4,14 +4,30 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 
+int rele[] = {43, 45, 47}; //Lista que armazena os pinos dos reles
+
 const int SS_PIN = 53;
 const int RST_PIN = 2;
-
-int rele[] = {43, 45, 47};
 
 MFRC522 rfid(SS_PIN, RST_PIN); //Cria um objeto MFRC522
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); //Cria um objeto LiquidCrystal_I2C com as configurações necessárias
+
+const byte ROWS = 4; // Número de linhas do teclado
+const byte COLS = 4; // Número de colunas do teclado
+
+// Define as teclas do teclado
+char keys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+byte rowPins[ROWS] = {10, 9, 8, 7};
+byte colPins[COLS] = {6, 5, 4, 3};
+
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 
 //Array de valores hexadecimais
 const String hexValues[] = {"8c2c564", "ba5d13a", "2A9C7E8B", "B24E758A"};
@@ -33,23 +49,28 @@ const String registro[] = {"12345", "67890", "54321", "09876"};
 //Nome do totem
 const String totem = "OverHead";
 
+String numRegistro = "";
+
+bool cartao = 0;
+bool teclado = 0;
+
 void setup() {
   Serial.begin(9600); //Inicia a comunicação serial
   lcd.begin (16, 2);  //Inicia LCD 16x2
   SPI.begin();        //Inicia a comunicação SPI
   rfid.PCD_Init();    //Inicia o leitor RFID
 
+  /*
     for (int i = 0; i < 3; i++) {
     pinMode(rele[i], OUTPUT);
     digitalWrite(rele[i], LOW);
-  }
+    }
+  */
 
   lcd.setCursor (0, 0);
   lcd.print("Sistema iniciado");
   Serial.println("Sistema iniciado");
-  Serial.println();
   delay(500);
-
   call_Card_Keypad();
 }
 
@@ -78,16 +99,29 @@ void call_Card_Keypad() {
     i = !i;
     //Verifica se um novo cartão RFID foi detectado
     if (rfid.PICC_IsNewCardPresent()) {
+      cartao = HIGH;
       //Se sim, sai do loop while
+      break;
+    }
+    // Verifica se alguma tecla foi pressionada
+    if (keypad.getKeys()) {
+      teclado = HIGH;
       break;
     }
   }
 }
 
 void loop() {
-  CartaoLido();
+  if (cartao) {
+    LeCartao();
+  }
+  if (teclado) {
+    LeTeclado();
+  }
 }
-void CartaoLido() {
+
+void LeCartao() {
+  cartao = !cartao;
   //Verifica se há um cartão RFID presente
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
     //Lê o valor hexadecimal do RFID
@@ -172,4 +206,27 @@ void CartaoLido() {
       lcd.print("cadastrado");
     }
   }
+}
+
+
+void LeTeclado() {
+  int i = 10;
+  teclado = !teclado;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Registro: ");
+  while (numRegistro.length() <= 4) {
+    lcd.setCursor(0, i);
+    char key = keypad.getKey();
+    if (key != NO_KEY) {
+      numRegistro.concat(key);
+      lcd.setCursor(i, 0);
+      lcd.print(key);
+      i++;
+    }
+  }
+  Serial.println();
+  Serial.print("Registro: ");
+  Serial.println(numRegistro);
+
 }
