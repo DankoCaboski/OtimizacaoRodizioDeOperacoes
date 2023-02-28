@@ -228,5 +228,8 @@ void LeTeclado() {
   Serial.println();
   Serial.print("Registro: ");
   Serial.println(numRegistro);
+  lcd.setCursor(0,1);
+  lcd.print("Precione 'D'");
+
 
 }
