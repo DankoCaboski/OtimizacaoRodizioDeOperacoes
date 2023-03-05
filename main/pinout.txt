@@ -1,14 +1,22 @@
-arduino mega 2560:
-	esp:
-		0,1
-	keypad:
-		3~10
-	reles:
-		43,45,47
+*******Arduino MEGA 2560********
+
+	ESP8266:
+		0 e 1
 		
-	rfid: - de acordo com a referencia da biblioteca
+	Keypad:
+		3 até 10
+		
+	Relés:
+		43,45 e 47
+		
+	RFID: - de acordo com a referencia da biblioteca
 		SS_PIN 53
 		RST_PIN 2
-	I2C:
-		sda 20
-		scl 21
+		
+	LCD/I2C:
+		SDA 20
+		SCL 21
+		
+	RTC:
+		SDA 20
+		SCL 21
