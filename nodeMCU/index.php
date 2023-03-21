@@ -7,6 +7,10 @@
 	<style type="text/css">
 
 		/* ESTILOS GERAIS */
+
+		.body {
+			background-color: display: dodgerblue;;
+		}
 		.container{
 			width: 50%;
 			margin: 0 auto;
