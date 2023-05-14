@@ -46,4 +46,5 @@ Sabendo da necessidade desse documento, viu-se oportuna a mudança da tratativa 
 - Visual Studio Code;
 - Excel;
 - GitHub;
+- Banco de Dados;
 - Arduino.
